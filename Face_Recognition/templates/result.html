@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Face Verification Result</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pangolin&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Pangolin", cursive;
+        color: #fff; /* White text */
+        text-align: center;
+      }
+
+      .success {
+        background-color: #228B22; /* Green */
+      }
+
+      .fail {
+        background-color: #ff0000; /* Red */
+      }
+
+      .result-container {
+        width: 300px;
+        margin: 50px auto;
+        padding: 20px;
+        text-align: center;
+        border-radius: 10px;
+        background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black background */
+      }
+
+      .pdf-link {
+        display: inline-block;
+        background-color: #fff;
+        padding: 5px 10px;
+        text-decoration: none;
+        color: #000;
+        border-radius: 10px;
+      }
+      .icon-container{
+        size: 15px;
+      }
+
+      .pdf-link:hover {
+        background-color: black;
+        text-decoration: none;
+        color: white;
+      }
+      .icon {
+  
+        font-size: 4em; /* Adjust the size as needed */
+        line-height: 1; /* Ensure proper vertical alignment */
+      }
+       /* For screens smaller than 600px */
+       @media only screen and (max-width: 600px) {
+        .glass-form {
+          width: 80%;
+        }
+      }
+
+      /* For screens between 601px and 900px */
+      @media only screen and (min-width: 601px) and (max-width: 900px) {
+        .glass-form {
+          width: 60%;
+        }
+      }
+
+      /* For screens between 901px and 1200px */
+      @media only screen and (min-width: 901px) and (max-width: 1200px) {
+        .glass-form {
+          width: 50%;
+        }
+      }
+
+      /* For screens larger than 1200px */
+      @media only screen and (min-width: 1201px) {
+        .glass-form {
+          width: 40%;
+        }
+      }
+    </style>
+    
+    <script
+      src="https://kit.fontawesome.com/6f615e1393.js"
+      crossorigin="anonymous"
+    ></script>
+    <!-- <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    /> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
+
+  </head>
+  <body {% if status == 1 %}class="success"{% else %}class="fail"{% endif %}>
+    <h1>Face Verification Result</h1>
+
+    <div class="result-container">
+      <p>{{ message }}</p>
+      {% if status == 1 %}
+      <div class="icon-container">
+        <i class="fa fa-thumbs-up icon"></i>
+        <h2>Success</h2>
+         
+      </div>
+      {% else %}
+      <div class="icon-container">
+        <i class="fa fa-thumbs-down icon"></i>
+        <h2>Failure</h2>
+      </div>
+      {% endif %}
+      {% if pdf_path %}
+      <p>
+        <a
+          href="{{ url_for('download_pdf', pdf_path=pdf_path) }}"
+          class="pdf-link"
+          >Download</a
+        >
+        </p>
+        Download the PDF with watermarked images.
+      
+      {% endif %}
+    </div>
+  </body>
+</html>

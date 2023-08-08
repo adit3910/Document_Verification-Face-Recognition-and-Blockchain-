@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@babel/core": "^7.21.3",
+    "ipfs-http-client": "^50.1.2"
+  }
+}

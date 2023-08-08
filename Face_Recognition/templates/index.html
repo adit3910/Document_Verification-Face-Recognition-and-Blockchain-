@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Face Verification</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pangolin&display=swap"
+      rel="stylesheet"
+    />
+    <script
+      src="https://kit.fontawesome.com/6f615e1393.js"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Pangolin&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .body {
+        background: #000;
+        color: #000;
+        font-family: "Pangolin", cursive;
+      }
+
+      /* Style to position the video container */
+      #video-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        overflow: hidden;
+      }
+
+      /* Style to make the video fill the container */
+      #video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      /* Style to center the content */
+      .content {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        padding: 50px;
+        color: #fff;
+        font-family: "Pangolin", cursive;
+      }
+
+      .glass-form {
+        width: 500px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.5);
+        backdrop-filter: blur(10px);
+        border-radius: 10px;
+        text-align: center;
+      }
+
+      .glass-form label,
+      .glass-form input,
+      .glass-form button {
+        display: block;
+        margin-bottom: 10px;
+      }
+
+      .glass-form input,
+      .glass-form button {
+        width: 30%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        margin: 0 auto;
+      }
+
+      .glass-form button {
+        background-color: #4c4cff;
+        color: white;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      .glass-form button:hover {
+        background-color: black;
+      }
+
+      .glass-form input[type="tel"] {
+        text-align: left;
+      }
+
+      .glass-form .file-label,
+      .glass-form .file-input {
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      .glass-form .file-label {
+        position: absolute;
+        left: 20px;
+        text-align: left;
+        width: 200px;
+        font-size: large;
+      }
+
+      .glass-form .file-input {
+        margin-left: 150px;
+        width: calc(50% - 150px);
+      }
+
+      .glass-form .capture-link {
+        display: inline-block;
+        background-color: white;
+        color: black;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        margin-top: 20px;
+        border: 2px solid transparent;
+        transition: border-color 0.3s;
+      }
+
+      .glass-form .capture-link:hover {
+        border-color: black;
+      }
+
+      .glass-form .form-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+
+      .glass-form label {
+        flex: 1;
+        margin-right: 10px;
+        line-height: 30px; /* Adjust the line height as needed */
+      }
+
+      .glass-form input[type="file"],
+      .glass-form input[type="tel"] {
+        flex: 1;
+        vertical-align: middle; /* Align the input vertically in the middle */
+      }
+      #upload-btn {
+        background-color: #4c4cff; /* Set the default background color of the upload button to blue */
+        color: white; /* Set the text color of the upload button to white */
+      }
+
+      .glass-form input[type="submit"] {
+        margin: 10px auto;
+        color: white; /* Change the text color to blue */
+        font-family: "Pangolin", cursive;
+        cursor: pointer;
+      }
+
+      /* Rest of the CSS styles */
+    </style>
+    <script>
+      // JavaScript code to handle hover effect on input[type="submit"]
+      window.addEventListener("DOMContentLoaded", function () {
+        var submitBtn = document.querySelector("#upload-btn");
+
+        submitBtn.addEventListener("mouseover", function () {
+          submitBtn.style.backgroundColor = "black";
+        });
+
+        submitBtn.addEventListener("mouseout", function () {
+          submitBtn.style.backgroundColor = "#4c4cff";
+        });
+
+        submitBtn.addEventListener("focus", function () {
+          submitBtn.style.backgroundColor = "black";
+        });
+
+        submitBtn.addEventListener("blur", function () {
+          submitBtn.style.backgroundColor = "#4c4cff";
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <!-- Video container -->
+    <div id="video-container">
+      <video id="video" autoplay muted loop>
+        <source src="../static/bgvideo.mp4" type="video/mp4" />
+      </video>
+    </div>
+
+    <div class="content">
+      <div class="glass-form">
+        <h1>Face Verification</h1>
+        <a href="{{ url_for('capture') }}" class="capture-link"
+          >Capture Live Image&nbsp;&nbsp;<i class="fa fa-camera"></i
+        ></a>
+        <br /><br />
+        <form
+          action="{{ url_for('upload') }}"
+          method="post"
+          enctype="multipart/form-data"
+          class="form"
+        >
+          <label class="file-label"
+            ><i class="fa fa-address-book"></i> &nbsp;&nbsp;Aadhar</label
+          >
+          <input
+            type="file"
+            name="aadhar"
+            accept="image/*"
+            class="file-input"
+          /><br />
+          <label class="file-label"
+            ><i class="fas fa-biking"></i>&nbsp;&nbsp; Driving License</label
+          >
+          <input
+            type="file"
+            name="driving_license"
+            accept="image/*"
+            class="file-input"
+          /><br />
+
+          <label class="file-label"
+            ><i class="fa fa-bank"></i>&nbsp;&nbsp;Pan Card</label
+          >
+          <input
+            type="file"
+            name="pan"
+            accept="image/*"
+            class="file-input"
+          /><br />
+          <label class="file-label"
+            ><i class="fa fa-vote-yea"></i>&nbsp;&nbsp;Voter Id</label
+          >
+          <input
+            type="file"
+            name="voter_id"
+            accept="image/*"
+            class="file-input"
+          /><br />
+          <label class="file-label"
+            ><i class="fa fa-phone-alt"></i>&nbsp;&nbsp;Phone number</label
+          >
+          <input
+            type="tel"
+            name="phone"
+            pattern="[0-9]{10}"
+            class="file-input"
+          />
+
+          <input
+            type="submit"
+            id="upload-btn"
+            value="Upload"
+            style="display: block; margin: 20px auto"
+          />
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
